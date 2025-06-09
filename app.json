@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "mente-inclusiva",
-    "slug": "mente-inclusiva",
+    "name": "Neuro-Guia",
+    "slug": "Neuro Guia",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo.png",
     "scheme": "menteinclusiva",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
