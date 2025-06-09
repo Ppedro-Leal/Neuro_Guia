@@ -22,7 +22,7 @@ export default function CadastroEtapa2() {
   const [loading, setLoading] = useState(false);
   
   // Obter o tipo de perfil dos parâmetros
-  const perfil = params.perfil as "Pai" | "Educador";
+  const perfil = params.perfil as "Responsavel" | "Educador";
   
   // URL da API de cadastro
   const API_URL = "https://autenticao.onrender.com/api/auth/register";

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Neuro-Guia",
-    "slug": "Neuro Guia",
+    "slug": "Neuro_Guia",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.ppedroleal.Neuro_Guia"
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +38,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5ee4c2c6-b8fb-4f4e-8344-82fc5049f196"
+      }
     }
   }
 }

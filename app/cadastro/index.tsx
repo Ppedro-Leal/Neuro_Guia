@@ -6,7 +6,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function CadastroEtapa1() {
   const router = useRouter();
-  const [perfil, setPerfil] = useState<"Pai" | "Educador" | null>(null);
+  const [perfil, setPerfil] = useState<"Responsavel" | "Educador" | null>(null);
 
   return (
     <SafeAreaProvider>
@@ -38,10 +38,10 @@ export default function CadastroEtapa1() {
           }}
         >
           <TouchableOpacity
-            style={[styles.option, perfil === "Pai" && styles.optionSelected]}
-            onPress={() => setPerfil("Pai")}
+            style={[styles.option, perfil === "Responsavel" && styles.optionSelected]}
+            onPress={() => setPerfil("Responsavel")}
           >
-            <Text style={styles.optionText}>Pai</Text>
+            <Text style={styles.optionText}>Responsável</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
