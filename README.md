@@ -5,7 +5,6 @@
 
 ## 🧠 Funcionalidades
 
-- Splash screen
 - Login e Cadastro de usuários
 - Navegação em abas (Bottom Tabs)
 - Listagem de cursos e conteúdos
@@ -24,25 +23,31 @@
 .
 ├── app/                  # Arquivos de rotas (Expo Router)
 │   ├── (tabs)/           # Telas acessadas via abas (Bottom Tabs)
-│   ├── login/            # Tela de login
+│      ├── curso/           # Telas de curso
+|          └──  [id].tsx       # Tela pegando o id referente ao curso respectivo
+|          └──  aula.tsx       # Tela da aula sendo assistida
+|      └── _layout.tsx       # Layout geral da barra inferior
+|      └──  acessibilidade.tsx       # Tela Acessibilidade
+|      └──  ajuda.tsx       # Tela ajuda
+|      └──  buscar.tsx       # Tela de busca
+|      └──  configuracoes.tsx       # Tela de configurações
+|      └──  home.tsx       # Tela Home
+|      └──  menu.tsx       # Tela de menu
+|      └──  salvos.tsx       # Tela de salvo
 │   ├── cadastro/         # Tela de cadastro
-│   ├── _layout.tsx       # Layout geral (tabs)
-│   └── index.tsx         # Splash ou home inicial
+|       └── index.tsx         # Tela inicial de Cadastro
+|       └── etapa2.tsx         # Tela final de Cadastro
+│   ├── _layout.tsx       # Layout geral
+│   └── index.tsx         # Tela inicial de login
 │
 ├── components/           # Componentes reutilizáveis
-│   ├── CursoCard.tsx     # Cartões de cursos
-│   ├── Input.tsx         # Campos de entrada
-│   └── Botao.tsx         # Botões customizados
+│   └── ButtonBack.tsx         # Botão de voltar
 │
-├── lib/                  # Configurações globais
-│   ├── api.ts            # Instância do axios para requisições
-│   └── auth.ts           # Funções de autenticação (login, cadastro)
 │
 ├── assets/               # Imagens e fontes
 │
-├── constants/            # Constantes de tema, cores, textos etc.
+├── contexts/            # Context de autenticacão
 │
-├── App.tsx               # Arquivo principal
 ├── package.json          # Dependências e scripts
 └── README.md             # Documentação do projeto
 ```
@@ -54,10 +59,8 @@
 - [React Native](https://reactnative.dev/)
 - [Expo](https://expo.dev/)
 - [Expo Router](https://expo.github.io/router/)
-- [Axios](https://axios-http.com/)
 - [React Navigation (Bottom Tabs)](https://reactnavigation.org/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [ShadCN (via Tailwind + NativeWind)](https://ui.shadcn.dev/)
 - [Render (Hospedagem da API)](https://render.com/)
 - [Railway (Banco de Dados MySQL)](https://railway.app/)
 
@@ -67,14 +70,21 @@
 
 A autenticação é feita por meio de uma **API externa** desenvolvida separadamente e hospedada no **Render**.
 
-Exemplo de login via `lib/auth.ts`:
+Exemplo de login via `app/index.tsx`:
 
 ```ts
-import axios from './api';
+const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          senha,
+        }),
+      });
 
-export async function login(email: string, senha: string) {
-  const response = await axios.post('/login', { email, senha });
-  return response.data;
+      const data = await response.json();
 }
 ```
 
@@ -85,8 +95,8 @@ export async function login(email: string, senha: string) {
 1. **Clone o repositório:**
 
 ```bash
-git clone https://github.com/seu-usuario/mente-inclusiva.git
-cd mente-inclusiva
+git clone https://github.com/Ppedro-Leal/Neuro_Guia.git
+cd Neuro_Guia
 ```
 
 2. **Instale as dependências:**
@@ -107,62 +117,9 @@ npx expo start
 
 ---
 
-## 🔧 Variáveis de Ambiente
+## 🛠️ Conexão com o Banco
 
-Crie um arquivo `.env` na raiz do projeto com:
-
-```env
-API_URL=https://sua-api-no-render.com
-```
-
-E no `lib/api.ts`:
-
-```ts
-const api = axios.create({
-  baseURL: process.env.API_URL,
-});
-```
-
----
-
-## 🛠️ Teste de Conexão com o Banco
-
-A conexão com o banco é feita via API backend. Mas para testes diretos:
-
-```bash
-node testConnection.js
-```
-
-```js
-// testConnection.js
-const mysql = require('mysql2');
-
-const connection = mysql.createConnection({
-  host: 'metro.proxy.rlwy.net',
-  port: 40740,
-  user: 'root',
-  password: 'yVeyqNYBFMzgeBKhypBcGvQzpmHKsGyb',
-  database: 'railway'
-});
-
-connection.connect((err) => {
-  if (err) {
-    console.error('Erro ao conectar:', err.message);
-  } else {
-    console.log('Conexão bem-sucedida!');
-  }
-
-  connection.end();
-});
-```
-
----
-
-## 👨‍💻 Desenvolvedor
-
-**Pedro Henrique Leal Amaral**  
-Desenvolvedor Full Stack | Técnico em Desenvolvimento de Sistemas  
-📧 [pedrohlealamaral@gmail.com](mailto:pedrohlealamaral@gmail.com)
+A conexão com o banco é feita via API backend.
 
 ---
 
