@@ -1,6 +1,7 @@
 // curso/buscar.tsx - Tela de busca
 import BackButton from "@/components/backbutton";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React from "react";
 import {
   ScrollView,
@@ -41,7 +42,7 @@ export default function BuscarScreen() {
         </View>
 
         <View style={styles.tagList}>
-          <TouchableOpacity style={styles.tag}>
+          <TouchableOpacity style={styles.tag} onPress={() => router.push("/(tabs)/curso/[id]")}>
             <Text style={styles.tagText}>Neurodiversidade</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.tag}>
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 12,
     marginLeft: "40%",
-    marginTop: "20%",
+    marginTop: "22%",
   },
   searchContainer: {
     flexDirection: "row",
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   tagList: {
     flexDirection: "column",
     gap: 30,
-    marginHorizontal: 10,
+    marginHorizontal: 0,
     justifyContent: "center",
     alignItems: "center",
   },

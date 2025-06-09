@@ -1,61 +1,85 @@
-import BackButton from '@/components/backbutton';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import BackButton from "@/components/backbutton";
+import { AuthContext } from "@/contexts/AuthContext";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import React, { useContext } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function MenuScreen() {
   const router = useRouter();
-
+  const { userData, logout } = useContext(AuthContext);
   const t = 30;
+
+  const handleLogout = async () => {
+    await logout();
+    router.replace("/");
+  };
 
   return (
     <SafeAreaProvider>
-    <View style={styles.container}>
-      <BackButton />
+      <View style={styles.container}>
+        <BackButton />
 
-      <Text style={styles.header}>Menu</Text>
+        <Text style={styles.header}>Menu</Text>
 
-      <View style={styles.profileSection}>
-        <Image source={require('../../assets/images/icon.png')} style={styles.avatar} />
-        <Text style={styles.username}>Thiago Castro</Text>
+        <View style={styles.profileSection}>
+          <Image
+            source={require("../../assets/images/icon.png")}
+            style={styles.avatar}
+          />
+          <Text style={styles.username}>{userData?.nome || "Usuário"}</Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/(tabs)/home")}
+        >
+          <Ionicons name="time-outline" size={t} color="#7C3AED" />
+          <Text style={styles.menuText}>Atividade recente</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/(tabs)/buscar")}
+        >
+          <Ionicons name="search-outline" size={t} color="#7C3AED" />
+          <Text style={styles.menuText}>Buscar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/(tabs)/salvos")}
+        >
+          <Ionicons name="bookmark-outline" size={t} color="#7C3AED" />
+          <Text style={styles.menuText}>Meus salvos</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+          <Ionicons name="chatbubbles-outline" size={t} color="#7C3AED" />
+          <Text style={styles.menuText}>Conversas</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/(tabs)/configuracoes")}
+        >
+          <Ionicons name="settings-outline" size={t} color="#7C3AED" />
+          <Text style={styles.menuText}>Configurações</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/(tabs)/ajuda")}
+        >
+          <Ionicons name="help-circle-outline" size={t} color="#7C3AED" />
+          <Text style={styles.menuText}>Ajuda</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.logout} onPress={handleLogout}>
+          <Text style={styles.logoutText}>Sair</Text>
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/(tabs)/home')}>
-        <Ionicons name="time-outline" size={t} color="#7C3AED" />
-        <Text style={styles.menuText}>Atividade recente</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/(tabs)/buscar')}>
-        <Ionicons name="search-outline" size={t} color="#7C3AED" />
-        <Text style={styles.menuText}>Buscar</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/(tabs)/salvos')}>
-        <Ionicons name="bookmark-outline" size={t} color="#7C3AED" />
-        <Text style={styles.menuText}>Meus salvos</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
-        <Ionicons name="chatbubbles-outline" size={t} color="#7C3AED" />
-        <Text style={styles.menuText}>Conversas</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/(tabs)/configuracoes')}>
-        <Ionicons name="settings-outline" size={t} color="#7C3AED" />
-        <Text style={styles.menuText}>Configurações</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/(tabs)/ajuda')}>
-        <Ionicons name="help-circle-outline" size={t} color="#7C3AED" />
-        <Text style={styles.menuText}>Ajuda</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.logout} onPress={() => router.push('/')}>
-        <Text style={styles.logoutText}>Sair</Text>
-      </TouchableOpacity>
-    </View>
     </SafeAreaProvider>
   );
 }
@@ -63,28 +87,28 @@ export default function MenuScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F0A1A',
-    padding: 24,
+    backgroundColor: "#0F0A1A",
+    padding: 26,
   },
   header: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 28,
     marginBottom: 12,
-    marginLeft: '40%',
-    marginTop: '10%',
-    color: '#5930EF'
+    marginLeft: "40%",
+    marginTop: "10%",
+    color: "#5930EF",
   },
   title: {
-    color: 'white',
+    color: "white",
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 12,
-    marginLeft: '40%',
-    marginTop: '20%'
+    marginLeft: "40%",
+    marginTop: "20%",
   },
   profileSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 24,
   },
   avatar: {
@@ -95,34 +119,33 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#5930EF',
+    fontWeight: "600",
+    color: "#5930EF",
   },
   menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 20,
   },
   menuText: {
     marginLeft: 12,
     fontSize: 24,
-    color: '#5930EF',
+    color: "#5930EF",
   },
   logout: {
-    position: 'absolute',
-    top: '95%',
-    alignSelf: 'center',
-    width: '40%',
-    height: '5%',
-    backgroundColor: '#5930EF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8
+    position: "absolute",
+    top: "95%",
+    alignSelf: "center",
+    width: "40%",
+    height: "5%",
+    backgroundColor: "#5930EF",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
   },
   logoutText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
-    fontWeight: 'bold',
-    
+    fontWeight: "bold",
   },
 });

@@ -18,7 +18,7 @@ export default function CadastroEtapa1() {
           borderBottomColor: "#aaafb9",
           borderBottomWidth: 2,
           zIndex: 10,
-          top: '52%'
+          top: "52%",
         }}
       ></View>
       <View style={styles.container}>
@@ -29,7 +29,14 @@ export default function CadastroEtapa1() {
           <Text style={styles.title}>Você é...</Text>
         </View>
 
-        <View style={{flexDirection: 'column', gap: '25%', justifyContent: 'center', alignItems: 'center'}}>
+        <View
+          style={{
+            flexDirection: "column",
+            gap: "25%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <TouchableOpacity
             style={[styles.option, perfil === "Pai" && styles.optionSelected]}
             onPress={() => setPerfil("Pai")}
@@ -50,7 +57,12 @@ export default function CadastroEtapa1() {
         <TouchableOpacity
           style={[styles.button, !perfil && { opacity: 0.5 }]}
           disabled={!perfil}
-          onPress={() => router.push("/cadastro/etapa2")}
+          onPress={() =>
+            router.push({
+              pathname: "/cadastro/etapa2",
+              params: { perfil },
+            })
+          }
         >
           <Text style={styles.buttonText}>Continuar</Text>
         </TouchableOpacity>
@@ -71,7 +83,7 @@ const styles = StyleSheet.create({
   textos: {
     width: "100%",
     alignItems: "center",
-    marginBottom: '20%'
+    marginBottom: "20%",
   },
   label: {
     color: "#aaa",
@@ -90,7 +102,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: 25,
     alignItems: "center",
-    width: '80%'
+    width: "80%",
   },
   optionSelected: {
     backgroundColor: "#5930EF",

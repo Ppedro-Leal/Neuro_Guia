@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 0,
     position: 'absolute',
-    top: '3%',
-    left: '3%',
+    top: '5%',
+    left: '4%',
     zIndex: 10,
   },
   text: {

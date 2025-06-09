@@ -1,7 +1,11 @@
+import { AuthContext } from "@/contexts/AuthContext";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -16,27 +20,79 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [lembrar, setLembrar] = useState(false);
+  const [loading, setLoading] = useState(false);
+   const { login } = useContext(AuthContext);
+
+  const API_URL = "https://autenticao.onrender.com/api/auth/login";
+
+  const handleLogin = async () => {
+    // Validação simples
+    if (!email || !senha) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          senha,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Erro ao fazer login");
+      }
+
+      // Salvar token e dados do usuário
+      if (lembrar) {
+        await AsyncStorage.setItem("userToken", data.token);
+        await AsyncStorage.setItem("userData", JSON.stringify(data.user));
+      }
+      await login(data.token, data.user);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      router.replace("/(tabs)/home");
+    } catch (error) {
+      console.error("Erro no login:", error);
+      Alert.alert("Erro", "Não foi possível fazer login");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        <Image source={require('../assets/images/logo.png')} style={styles.logo} />
+        <Image
+          source={require("../assets/images/logo.png")}
+          style={styles.logo}
+        />
         <Text style={styles.title}>NEURO GUIA</Text>
 
         <View style={styles.inputs}>
           <View style={styles.iconInput}>
-            <Ionicons name="mail" size={24} color="#7859ea"/>
+            <Ionicons name="mail" size={24} color="#7859ea" />
             <TextInput
               style={styles.input}
               placeholder="Insira seu email"
               placeholderTextColor="#aaa"
               value={email}
               onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
           </View>
 
           <View style={styles.iconInput}>
-            <Ionicons name="lock-closed" size={24} color="#7859ea"/>
+            <Ionicons name="lock-closed" size={24} color="#7859ea" />
             <TextInput
               style={styles.input}
               placeholder="Insira sua senha"
@@ -47,6 +103,7 @@ export default function Login() {
             />
           </View>
         </View>
+
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             onPress={() => setLembrar(!lembrar)}
@@ -59,9 +116,14 @@ export default function Login() {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push("/(tabs)/home")}
+          onPress={handleLogin}
+          disabled={loading}
         >
-          <Text style={styles.buttonText}>Entrar</Text>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Entrar</Text>
+          )}
         </TouchableOpacity>
 
         <Text style={styles.link}>Esqueceu a senha?</Text>
@@ -92,6 +154,7 @@ export default function Login() {
   );
 }
 
+// Mantenha os estilos como estão
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -103,24 +166,24 @@ const styles = StyleSheet.create({
   logo: {
     width: 190,
     height: 190,
-    marginBottom: '5%',
+    marginBottom: "5%",
     resizeMode: "cover",
   },
   title: {
     fontSize: 22,
     color: "#5930EF",
-    marginBottom: '25%',
+    marginBottom: "25%",
     fontWeight: "bold",
   },
   inputs: {
     width: "100%",
     flexDirection: "column",
-    paddingRight: '5%',
-    marginBottom: '5%'
+    paddingRight: "5%",
+    marginBottom: "5%",
   },
   iconInput: {
     flexDirection: "row",
-    alignItems: 'center'
+    alignItems: "center",
   },
   input: {
     backgroundColor: "transparent",
@@ -130,8 +193,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#7C3AED",
     borderBottomWidth: 2,
     borderRadius: 12,
-    marginBottom: '5%',
-    marginRight: '10%',
+    marginBottom: "5%",
+    marginRight: "10%",
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -164,7 +227,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 16
+    fontSize: 16,
   },
   link: {
     color: "#5930EF",
@@ -173,12 +236,12 @@ const styles = StyleSheet.create({
   },
   or: {
     color: "#aaa",
-    marginBottom: '8%',
-    fontSize: 16
+    marginBottom: "8%",
+    fontSize: 16,
   },
   social: {
     flexDirection: "row",
-    marginBottom: '10%',
+    marginBottom: "10%",
   },
   cadastrar: {
     color: "#fff",

@@ -1,7 +1,9 @@
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -13,9 +15,70 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function CadastroEtapa2() {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [telefone, setTelefone] = useState("");
   const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
+  
+  // Obter o tipo de perfil dos parâmetros
+  const perfil = params.perfil as "Pai" | "Educador";
+  
+  // URL da API de cadastro
+  const API_URL = "https://autenticao.onrender.com/api/auth/register";
+
+  const handleCadastro = async () => {
+    // Validação dos campos
+    if (!nome || !email || !senha) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos");
+      return;
+    }
+
+    if (senha.length < 6) {
+      Alert.alert("Erro", "A senha deve ter pelo menos 6 caracteres");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome,
+          email,
+          senha,
+          tipo: perfil // Envia o tipo de perfil (Pai ou Educador)
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Erro ao cadastrar");
+      }
+
+      // Mostra mensagem de sucesso
+      Alert.alert("Sucesso", "Cadastro realizado com sucesso!", [
+        {
+          text: "OK",
+          onPress: () => {
+            // Redireciona para a tela de login
+            router.replace("/");
+          },
+        },
+      ]);
+
+    } catch (error) {
+      console.error("Erro no cadastro:", error);
+      Alert.alert("Erro", "Não foi possível realizar o cadastro");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaProvider>
@@ -33,8 +96,9 @@ export default function CadastroEtapa2() {
               placeholder="Nome"
               placeholderTextColor="#aaa"
               keyboardType="default"
-              value={telefone}
-              onChangeText={setTelefone}
+              value={nome}
+              onChangeText={setNome}
+              autoCapitalize="words"
             />
           </View>
           <View style={styles.iconInput}>
@@ -45,6 +109,8 @@ export default function CadastroEtapa2() {
               placeholderTextColor="#aaa"
               value={email}
               onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
           </View>
 
@@ -52,7 +118,7 @@ export default function CadastroEtapa2() {
             <Ionicons name="lock-closed" size={24} color="#7859ea" />
             <TextInput
               style={styles.input}
-              placeholder="Senha"
+              placeholder="Senha (mínimo 6 caracteres)"
               placeholderTextColor="#aaa"
               secureTextEntry
               value={senha}
@@ -62,10 +128,15 @@ export default function CadastroEtapa2() {
         </View>
 
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push("/")}
+          style={[styles.button, (!nome || !email || !senha) && { opacity: 0.5 }]}
+          onPress={handleCadastro}
+          disabled={!nome || !email || !senha || loading}
         >
-          <Text style={styles.buttonText}>Cadastrar</Text>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Cadastrar</Text>
+          )}
         </TouchableOpacity>
 
         <Text style={styles.or}>Ou</Text>
@@ -81,7 +152,7 @@ export default function CadastroEtapa2() {
           <FontAwesome name="phone" size={34} color="white" />
         </View>
 
-        <TouchableOpacity onPress={() => router.push("/")}>
+        <TouchableOpacity onPress={() => router.replace("/")}>
           <Text style={styles.link}>Já possui conta? Entrar</Text>
         </TouchableOpacity>
       </View>
