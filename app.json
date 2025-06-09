@@ -2,7 +2,7 @@
   "expo": {
     "name": "Neuro-Guia",
     "slug": "Neuro_Guia",
-    "version": "1.0.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "scheme": "menteinclusiva",
