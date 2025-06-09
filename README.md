@@ -117,9 +117,16 @@ npx expo start
 
 ---
 
-## 🛠️ Conexão com o Banco
 
-A conexão com o banco é feita via API backend.
+## Como testar o projeto rapidamente:
+
+Baixe o apk através de : https://expo.dev/accounts/ppedro-leal/projects/Neuro_Guia/builds/983e7230-cf07-4c08-a415-02c8e125b944
+
+
+
+## 🛠️ Conexão com o Banco railway
+
+A conexão com o banco é feita via API criada com node e express backend.
 
 ---
 
